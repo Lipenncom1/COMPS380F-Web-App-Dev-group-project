@@ -18,9 +18,21 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    runtimeOnly 'com.h2database:h2'
+    compileOnly 'org.apache.tomcat.embed:tomcat-embed-jasper' //to compile JSP for views
+
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api' //API of JSTL
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'//implementation of JSTL
+
+    implementation 'jakarta.el:jakarta.el-api'//API of EL
+    implementation 'org.apache.commons:commons-lang3'//Java Objects Manipulation
+    implementation 'org.springframework.boot:spring-boot-starter-actuator' //Monitoring & Management endpoints
+    implementation 'org.springframework.boot:spring-boot-starter-web' // Web App Support
+    //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    //implementation 'org.springframework.boot:spring-boot-starter-security' //spring security
+
+    runtimeOnly 'com.h2database:h2' //H2 Database
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
