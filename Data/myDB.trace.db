@@ -209,3 +209,18 @@ SELECT username, password, true FROM users WHERE username=? [42102-232]
 2025-03-29 17:31:00.106696+08:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
 SELECT username, password, true FROM users WHERE username=? [42102-232]
+2025-03-30 20:36:06.542199+08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists userinfo \000d\000a       alter column full_name set data type VARCHAR(20) [*]DEFAULT 'FACHK CHAIN'"; SQL statement:
+
+    alter table if exists userinfo 
+       alter column full_name set data type VARCHAR(20) DEFAULT 'FACHK CHAIN' [42000-232]
+2025-03-30 20:36:06.548374+08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists userinfo \000d\000a       alter column role set data type VARCHAR(20) [*]DEFAULT 'STUDENT'"; SQL statement:
+
+    alter table if exists userinfo 
+       alter column role set data type VARCHAR(20) DEFAULT 'STUDENT' [42000-232]
+2025-03-30 20:36:06.549358+08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists userinfo \000d\000a       alter column sid set data type VARCHAR(20) [*]DEFAULT 'a0000000'"; SQL statement:
+
+    alter table if exists userinfo 
+       alter column sid set data type VARCHAR(20) DEFAULT 'a0000000' [42000-232]

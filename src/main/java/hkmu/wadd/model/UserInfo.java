@@ -1,5 +1,6 @@
 package hkmu.wadd.model;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers;
 import jakarta.persistence.*;
 import java.util.Objects;
 
@@ -11,81 +12,89 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "sid", unique = true, nullable = false)
-    private String sid = "a0000000";
+    @Column(name = "sid", unique = true, nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'a0000000'")
+    private String sid;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 20)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String password;
 
-    @Column(name = "full_name", nullable = false)
-    private String fullName = "FACKY CHAIN";
+    @Column(name = "fullName", nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'FACHK CHAIN'")
+    private String fullName;
 
-    @Column(name = "phone_num")
+    @Column(name = "phoneNum", length = 20)
     private String phoneNum;
 
+    @Column(length = 50)
     private String email;
 
-    @Column(nullable = false)
-    private String role = "STUDENT";
+    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'STUDENT'")
+    private String role;
 
-    // ---------- JPA 必需的无参构造函数 ----------
-    protected UserInfo() {}
-
-    // ---------- 全参构造函数（可选） ----------
-    public UserInfo(Long id, String sid, String username, String password, String fullName, String phoneNum, String email, String role) {
-        this.id = id;
-        this.sid = sid;
-        this.username = username;
-        this.password = password;
-        this.fullName = fullName;
-        this.phoneNum = phoneNum;
-        this.email = email;
-        this.role = role;
+    // Getters and Setters
+    public Long getId() {
+        return id;
     }
 
-    //UserInfo() 和 hashCode
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    // ---------- Getter/Setter 方法 ----------
-    public Long getId() { return id; }
+    public String getSid() {
+        return sid;
+    }
 
-    public void setId(Long id) { this.id = id; }
+    public void setSid(String sid) {
+        this.sid = sid;
+    }
 
-    public String getSid() { return sid; }
+    public String getUsername() {
+        return username;
+    }
 
-    public void setSid(String sid) { this.sid = sid; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-    public String getUsername() { return username; }
+    public String getPassword() {
+        return password;
+    }
 
-    public void setUsername(String username) { this.username = username; }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public String getPassword() { return password; }
+    public String getFullName() {
+        return fullName;
+    }
 
-    public void setPassword(String password) { this.password = password; }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-    public String getFullName() { return fullName; }
+    public String getPhoneNum() {
+        return phoneNum;
+    }
 
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
 
-    public String getPhoneNum() { return phoneNum; }
+    public String getEmail() {
+        return email;
+    }
 
-    public void setPhoneNum(String phoneNum) { this.phoneNum = phoneNum; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getEmail() { return email; }
+    public String getRole() {
+        return role;
+    }
 
-    public void setEmail(String email) { this.email = email; }
-
-    public String getRole() { return role; }
-
-    public void setRole(String role) { this.role = role; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserInfo userInfo = (UserInfo) o;
-        return false;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

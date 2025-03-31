@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS USERINFO (
     sid VARCHAR(20) DEFAULT 'a0000000' NOT NULL UNIQUE,
     username VARCHAR(20) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    full_name VARCHAR(20) DEFAULT 'FACKY CHAIN' NOT NULL,
-    phone_num VARCHAR(20),
+    fullName VARCHAR(20) DEFAULT 'FACKY CHAIN' NOT NULL,
+    phoneNum VARCHAR(20),
     email VARCHAR(50),
     role VARCHAR(20) DEFAULT 'STUDENT'     --student/teacher/admin
 );
