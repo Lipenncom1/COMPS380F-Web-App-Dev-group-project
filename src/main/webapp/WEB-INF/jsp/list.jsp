@@ -13,6 +13,11 @@
 </head>
 <body>
 <h2>Tickets</h2>
+
+<security:authorize access="hasRole('ADMIN')">
+  <a href="<c:url value="/user" />">Manage User Accounts</a><br /><br />
+</security:authorize>
+
 <a href="<c:url value="/lecture/addLecture" />">Add a lecture</a><br/><br/>
 <c:choose>
   <c:when test="${fn:length(lectureDatabase) == 0}">
