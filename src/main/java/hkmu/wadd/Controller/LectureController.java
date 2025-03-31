@@ -125,7 +125,7 @@ public class LectureController {
 //                && !principal.getName().equals(lecture.getLectureTitle())
             return "redirect:/lecture/list";
         }
-        lectureService.updateLecture(lectureId, lecture.getLectureTitle(), form.getAttachments());
+        lectureService.updateLecture(lectureId, form.getLectureTitle(), form.getAttachments());
         return "redirect:/lecture/view/" + lectureId;
     }
 

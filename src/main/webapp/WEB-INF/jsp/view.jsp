@@ -18,10 +18,20 @@
 <c:if test="${!empty lecture.attachments}">
   Attachments:
   <c:forEach items="${lecture.attachments}" var="attachment" varStatus="status">
+
     <c:if test="${!status.first}">, </c:if>
     <a href="<c:url value="/lecture/${lectureId}/attachment/${attachment.id}" />">
       <c:out value="${attachment.name}"/></a>
-    [<a href="<c:url value="/lecture/${lectureId}/delete/${attachment.id}" />">Delete</a>]
+
+    <security:authorize access="hasRole('ADMIN')">
+      [<a href="<c:url value="/lecture/editLecture/${attachment.id}" />">Edit</a>]
+    </security:authorize>
+
+    <security:authorize access="hasRole('ADMIN')">
+      [<a href="<c:url value="/lecture/delete/${attachment.id}" />">Delete</a>]
+    </security:authorize>
+    <br />
+
   </c:forEach><br/><br/>
 </c:if>
 <a href="<c:url value="/lecture" />">Return to list lecture</a>

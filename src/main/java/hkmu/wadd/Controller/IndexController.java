@@ -8,4 +8,9 @@ public class IndexController {
     public String index() {
         return "redirect:/lecture/list";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
 }

@@ -23,7 +23,15 @@
       Lecture ${entry.id}:
       <a href="<c:url value="/lecture/view/${entry.id}" />">
         <c:out value="${entry.lectureTitle}"/></a>
-      [<a href="<c:url value="/lecture/delete/${entry.id}" />">Delete</a>]<br />
+
+      <security:authorize access="hasRole('ADMIN')">
+        [<a href="<c:url value="/lecture/editLecture/${entry.id}" />">Edit</a>]
+      </security:authorize>
+      <security:authorize access="hasRole('ADMIN')">
+        [<a href="<c:url value="/lecture/delete/${entry.id}" />">Delete</a>]
+      </security:authorize>
+      <br />
+
     </c:forEach>
   </c:otherwise>
 </c:choose>
