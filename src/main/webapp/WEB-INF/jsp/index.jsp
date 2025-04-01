@@ -1,3 +1,4 @@
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -7,12 +8,18 @@
 </head>
 <body>
 <h2>Lectures & Polls</h2>
+<security:authorize access="isAnonymous()">
+  <a href="<c:url value="/login"/>">Login</a><br />
+</security:authorize>
 
 <security:authorize access="hasRole('ADMIN')">
   <a href="<c:url value="/user" />">Manage User Accounts</a><br /><br />
 </security:authorize>
 
-<a href="<c:url value="/index/addLecture" />">Add a lecture</a><br/><br/>
+<security:authorize access="hasRole('ADMIN')">
+  <a href="<c:url value="/index/addLecture" />">Add a lecture</a><br/><br/>
+</security:authorize>
+
 <c:choose>
   <c:when test="${fn:length(lectureDatabase) == 0}">
     <i>There are no lectures in the system.</i>
@@ -35,10 +42,12 @@
     </c:forEach>
   </c:otherwise>
 </c:choose>
+<security:authorize access="hasAnyRole('USER', 'ADMIN')">
 <c:url var="logoutUrl" value="/logout"/>
 <form action="${logoutUrl}" method="post">
   <input type="submit" value="Log out" />
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</security:authorize>
 </form>
 </body>
 </html>
