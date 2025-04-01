@@ -1,0 +1,44 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Index</title>
+</head>
+<body>
+<h2>Lectures & Polls</h2>
+
+<security:authorize access="hasRole('ADMIN')">
+  <a href="<c:url value="/user" />">Manage User Accounts</a><br /><br />
+</security:authorize>
+
+<a href="<c:url value="/index/addLecture" />">Add a lecture</a><br/><br/>
+<c:choose>
+  <c:when test="${fn:length(lectureDatabase) == 0}">
+    <i>There are no lectures in the system.</i>
+  </c:when>
+  <c:otherwise>
+    <c:forEach items="${lectureDatabase}" var="entry">
+      Lecture ${entry.id}:
+      <a href="<c:url value="/index/view/${entry.id}" />">
+        <c:out value="${entry.lectureTitle}"/></a>
+
+      <security:authorize access="hasRole('ADMIN')">
+        [<a href="<c:url value="/index/editLecture/${entry.id}" />">Edit</a>]
+      </security:authorize>
+
+      <security:authorize access="hasRole('ADMIN')">
+        [<a href="<c:url value="/index/delete/${entry.id}" />">Delete</a>]
+      </security:authorize>
+      <br />
+
+    </c:forEach>
+  </c:otherwise>
+</c:choose>
+<c:url var="logoutUrl" value="/logout"/>
+<form action="${logoutUrl}" method="post">
+  <input type="submit" value="Log out" />
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
+</body>
+</html>

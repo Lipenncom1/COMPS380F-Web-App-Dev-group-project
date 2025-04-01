@@ -1,0 +1,6 @@
+2025-04-01 13:13:38.834784+08:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "LECTURE_TITLE" not found; SQL statement:
+select * from lecture_title [42102-232]
+2025-04-01 13:14:11.014964+08:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "LECTURE_TITLE" not found; SQL statement:
+select * from LECTURE_TITLE [42102-232]
