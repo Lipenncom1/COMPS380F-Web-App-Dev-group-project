@@ -27,7 +27,11 @@
   <c:otherwise>
     <c:forEach items="${lectureDatabase}" var="entry">
       Lecture ${entry.id}:
-      <a href="<c:url value="/index/view/${entry.id}" />">
+
+      <security:authorize access="hasAnyRole('ADMIN','USER')">
+        <a href="<c:url value="/index/view/${entry.id}" />">
+      </security:authorize>
+
         <c:out value="${entry.lectureTitle}"/></a>
 
       <security:authorize access="hasRole('ADMIN')">

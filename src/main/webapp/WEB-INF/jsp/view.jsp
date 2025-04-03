@@ -8,7 +8,7 @@
 </head>
 <body>
 <h2>Lecture #${lectureId}: <c:out value="${lecture.lectureTitle}"/></h2>
-[<a href="<c:url value="/index/delete/${lecture.id}" />">Delete</a>]<br/><br/>
+<%--[<a href="<c:url value="/index/delete/${lecture.id}" />">Delete</a>]<br/><br/>--%>
 <c:if test="${!empty lecture.attachments}">
   Attachments:
   <c:forEach items="${lecture.attachments}" var="attachment" varStatus="status">
@@ -38,7 +38,6 @@
           <strong><c:out value="${comment.username}"/>:</strong>
           <c:out value="${comment.commentText}"/>
           <security:authorize access="hasRole('ADMIN')">
-<%--            [<a href="<c:url value="/index/${lectureId}/delete/${comment.commentId}" />">Delete</a>]--%>
             <form method="post" action="<c:url value='/comments/${lectureId}/delete/${comment.commentId}'/>" style="display: inline;">
               <input type="submit" value="Delete"/>
               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
