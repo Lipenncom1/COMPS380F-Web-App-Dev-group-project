@@ -16,7 +16,7 @@ public class SecurityConfig {
             throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/index/delete/**","/user/**", "/index/editLecture/**","/index/addLecture/**","/index/**").hasRole("ADMIN")
+                        .requestMatchers("/index/delete/**","/user/**", "/index/editLecture/**","/index/addLecture/**").hasRole("ADMIN")
                         .requestMatchers("/view/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/h2-console/**","/css/**","/js/**").permitAll()
                         .anyRequest().permitAll()

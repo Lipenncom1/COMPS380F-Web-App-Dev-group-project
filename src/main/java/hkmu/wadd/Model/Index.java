@@ -23,6 +23,11 @@ public class Index {
     @Fetch(FetchMode.SUBSELECT)
     private List<Attachment> attachments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "lecture", fetch = FetchType.EAGER,
+            cascade = CascadeType.MERGE, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<LectureComments> lecturecomments = new ArrayList<>();
+
     public long getId() {
         return id;
     }
@@ -50,5 +55,17 @@ public class Index {
     public void deleteAttachment(Attachment attachment) {
         attachment.setLecture(null);
         this.attachments.remove(attachment);
+    }
+
+    public List<LectureComments> getLecturecomments() {
+        return lecturecomments;
+    }
+
+    public void setLecturecomments(List<LectureComments> lecturecomments) {
+        this.lecturecomments = lecturecomments;
+    }
+
+    public void deleteLectureComment(LectureComments lecturecomment) {
+        this.lecturecomments.remove(lecturecomment);
     }
 }
