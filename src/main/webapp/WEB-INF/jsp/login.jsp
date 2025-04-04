@@ -29,5 +29,8 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <input type="submit" value="Log In"/>
 </form>
+
+<p>Don't have an account?</p>
+<a href="${pageContext.request.contextPath}/user/register" class="register-link">Register Here</a>
 </body>
 </html>
