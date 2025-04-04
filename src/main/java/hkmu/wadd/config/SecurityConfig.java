@@ -16,6 +16,7 @@ public class SecurityConfig {
             throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/user/register").permitAll() //Allow access to register endpoint first
                         .requestMatchers("/index/delete/**","/user/**", "/index/editLecture/**","/index/addLecture/**").hasRole("ADMIN")
                         .requestMatchers("/view/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/h2-console/**","/css/**","/js/**").permitAll()

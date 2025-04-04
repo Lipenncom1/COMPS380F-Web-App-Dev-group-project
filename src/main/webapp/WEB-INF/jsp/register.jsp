@@ -15,25 +15,26 @@ Date and Time: 31/03/2025 4:48 PM
 </head>
 <body>
 <h1>Register</h1>
-<form:form action="${pageContext.request.contextPath}/register" method="POST" modelAttribute="userRegistration">
+<form>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
+<form:form action="${pageContext.request.contextPath}/user/register" method="POST" modelAttribute="registrationForm">
     <label for="username">Username</label>
     <form:input path="username" id="username" required="required"/>
-    <form:errors path="username" cssClass="error"/><br>
 
     <label for="password">Password</label>
     <form:input type="password" path="password" id="password" required="required"/>
-    <form:errors path="password" cssClass="error"/><br>
 
     <label for="fullName">Full Name</label>
-    <form:input path="fullName" id="fullName"/><br/>
+    <form:input path="fullName" id="fullName" required="required"/>
 
     <label for="email">Email</label>
     <form:input type="email" path="email" id="email" required="required"/>
-    <form:errors path="email" cssClass="error"/><br>
 
     <label for="phone">Phone</label>
     <form:input path="phone" id="phone" required="required"/>
-    <form:errors path="phone" cssClass="error"/><br>
+
+    <form:hidden path="roles" value="ROLE_USER"/> <!--Default role-->
 
     <button type="submit">Register</button>
 </form:form>

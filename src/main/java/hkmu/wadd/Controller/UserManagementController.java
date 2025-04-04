@@ -2,12 +2,10 @@ package hkmu.wadd.Controller;
 
 import hkmu.wadd.dao.UserManagementService;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -25,6 +23,9 @@ public class UserManagementController {
     public static class Form {
         private String username;
         private String password;
+        private String fullName;
+        private String email;
+        private String phone;
         private String[] roles;
         // getters and setters for all properties
 
@@ -51,6 +52,18 @@ public class UserManagementController {
         public void setRoles(String[] roles) {
             this.roles = roles;
         }
+
+        public String getFullName() { return fullName; }
+
+        public void setFullName(String fullName) { this.fullName = fullName; }
+
+        public String getEmail() { return email; }
+
+        public void setEmail(String email) { this.email = email; }
+
+        public String getPhone() { return phone; }
+
+        public void setPhone(String phone) { this.phone = phone; }
     }
     @GetMapping("/create")
     public ModelAndView create() {
@@ -67,5 +80,18 @@ public class UserManagementController {
     public String deleteUser(@PathVariable("username") String username) {
         umService.delete(username);
         return "redirect:/user/listUser";
+    }
+    @GetMapping("/register")
+    public ModelAndView showRegistrationForm() {
+        return new ModelAndView("register", "registrationForm", new Form());
+    }
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute("registrationForm") Form form) throws IOException {
+        umService.registerIndexUser(
+                form.getUsername(), form.getPassword(),
+                form.getFullName(), form.getEmail(),
+                form.getPhone(), form.getRoles()
+        );
+        return "redirect:/login?registered=true";
     }
 }
