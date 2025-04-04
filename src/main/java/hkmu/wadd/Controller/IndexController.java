@@ -9,6 +9,8 @@ import hkmu.wadd.exception.AttachmentNotFound;
 import hkmu.wadd.exception.LectureNotFound;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import org.hibernate.sql.Update;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,43 @@ public class IndexController {
     public String list(ModelMap model) {
         model.addAttribute("lectureDatabase", indexService.getLectures());
         return "index";
+    }
+
+    public static class UpdateForm {
+        private String password;
+        private String fullName;
+        private String email;
+        private String phone;
+        private String[] roles;
+        // getters and setters for all properties
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String[] getRoles() {
+            return roles;
+        }
+
+        public void setRoles(String[] roles) {
+            this.roles = roles;
+        }
+
+        public String getFullName() { return fullName; }
+
+        public void setFullName(String fullName) { this.fullName = fullName; }
+
+        public String getEmail() { return email; }
+
+        public void setEmail(String email) { this.email = email; }
+
+        public String getPhone() { return phone; }
+
+        public void setPhone(String phone) { this.phone = phone; }
     }
 
     @GetMapping("/addLecture")
@@ -129,7 +168,16 @@ public class IndexController {
         return "redirect:/index/view/" + lectureId;
     }
 
-
+    @GetMapping("/update")
+    public ModelAndView showUpdateForm() { return new ModelAndView("updateUser", "updateForm", new UpdateForm()); }
+    @PostMapping("/update")
+    public String updateUserProfile(@Valid @ModelAttribute("updateForm") UpdateForm form, Principal principal) throws IOException {
+        String username = principal.getName();
+        indexService.updateUserProfile(username,
+                form.getPassword(), form.getFullName(),
+                form.getEmail(), form.getPhone());
+        return "redirect:/index?updateSuccess=true";
+    }
 
     @ExceptionHandler({LectureNotFound.class, AttachmentNotFound.class})
     public ModelAndView error(Exception e){

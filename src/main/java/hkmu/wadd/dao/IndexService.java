@@ -9,9 +9,12 @@ package hkmu.wadd.dao;
 
 import hkmu.wadd.Model.Attachment;
 import hkmu.wadd.Model.Index;
+import hkmu.wadd.Model.IndexUser;
 import hkmu.wadd.exception.AttachmentNotFound;
 import hkmu.wadd.exception.LectureNotFound;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +30,8 @@ public class IndexService {
 
     @Resource
     private AttachmentRepository attachmentRepository;
+    @Autowired
+    private IndexUserRepository indexUserRepository;
 
     @Transactional
     public List<Index> getLectures() {
@@ -120,5 +125,18 @@ public class IndexService {
             }
         }
         indexRepository.save(updatedLecture);
+    }
+
+    @Transactional
+    public void updateUserProfile(String username, String password,String fullName, String email, String phone){
+        IndexUser user = indexUserRepository.findById(username).orElseThrow( () -> new UsernameNotFoundException("User not found"));
+
+        //UPDATE-ABLE FIELDS
+        if (password != null) user.setPassword(password);
+        if (fullName != null) user.setFullName(fullName);
+        if (email != null) user.setEmail(email);
+        if (phone != null) user.setPhone(phone);
+
+        indexUserRepository.save(user);
     }
 }
