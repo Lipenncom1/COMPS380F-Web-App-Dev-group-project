@@ -139,4 +139,10 @@ public class IndexService {
 
         indexUserRepository.save(user);
     }
+
+    @Transactional
+    public IndexUser findUserByUsername(String username) {
+        return indexUserRepository.findById(username).orElse(null);
+    }
+
 }

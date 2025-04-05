@@ -180,14 +180,26 @@ public class UserManagementController {
         modelAndView.addObject("editForm", user);
         return modelAndView;
     }
+
     @PostMapping("/edit/{username}")
     public String editUser(@PathVariable("username") String username, @Valid @ModelAttribute("editForm") editForm editform, Principal principal, HttpServletRequest request) throws IOException {
-        IndexUser user = umService.findUserByUsername(username);
-        umService.editUser(
-                username, editform.getPassword(), editform.getFullName(),
-                editform.getEmail(), editform.getPhone(), editform.getRoles()
-        );
+        // Fetch the current user details
+        IndexUser currentUser = umService.findUserByUsername(username);
+
+        // Apply conditional updates only if the fields are not empty
+        String updatedPassword = editform.getPassword().isEmpty() ? currentUser.getPassword() : editform.getPassword();
+        String updatedFullName = editform.getFullName().isEmpty() ? currentUser.getFullName() : editform.getFullName();
+        String updatedEmail = editform.getEmail().isEmpty() ? currentUser.getEmail() : editform.getEmail();
+        String updatedPhone = editform.getPhone().isEmpty() ? currentUser.getPhone() : editform.getPhone();
+        String[] updatedRoles = (editform.getRoles() == null || editform.getRoles().length == 0) ?
+                currentUser.getRoles().stream().map(UserRole::getRole).toArray(String[]::new) :
+                editform.getRoles();
+
+        // Pass the updated values to the service layer
+        umService.editUser(username, updatedPassword, updatedFullName, updatedEmail, updatedPhone, updatedRoles);
+
         return "redirect:/user/listUser?update=true";
     }
+
 
 }

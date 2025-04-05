@@ -3,6 +3,7 @@ package hkmu.wadd.Controller;
 
 import hkmu.wadd.Model.Attachment;
 import hkmu.wadd.Model.Index;
+import hkmu.wadd.Model.IndexUser;
 import hkmu.wadd.View.DownloadingView;
 import hkmu.wadd.dao.IndexService;
 import hkmu.wadd.exception.AttachmentNotFound;
@@ -170,12 +171,32 @@ public class IndexController {
 
     @GetMapping("/update")
     public ModelAndView showUpdateForm() { return new ModelAndView("updateUser", "updateForm", new UpdateForm()); }
+
+//    @PostMapping("/update")
+//    public String updateUserProfile(@Valid @ModelAttribute("updateForm") UpdateForm form, Principal principal) throws IOException {
+//        String username = principal.getName();
+//        indexService.updateUserProfile(username,
+//                form.getPassword(), form.getFullName(),
+//                form.getEmail(), form.getPhone());
+//        return "redirect:/index?updateSuccess=true";
+//    }
+
     @PostMapping("/update")
     public String updateUserProfile(@Valid @ModelAttribute("updateForm") UpdateForm form, Principal principal) throws IOException {
         String username = principal.getName();
-        indexService.updateUserProfile(username,
-                form.getPassword(), form.getFullName(),
-                form.getEmail(), form.getPhone());
+
+        // Fetch the current user details
+        IndexUser currentUser = indexService.findUserByUsername(username);
+
+        // Apply conditional updates only if the fields are not empty
+        String updatedPassword = form.getPassword().isEmpty() ? currentUser.getPassword() : form.getPassword();
+        String updatedFullName = form.getFullName().isEmpty() ? currentUser.getFullName() : form.getFullName();
+        String updatedEmail = form.getEmail().isEmpty() ? currentUser.getEmail() : form.getEmail();
+        String updatedPhone = form.getPhone().isEmpty() ? currentUser.getPhone() : form.getPhone();
+
+        // Pass the updated values to the service layer
+        indexService.updateUserProfile(username, updatedPassword, updatedFullName, updatedEmail, updatedPhone);
+
         return "redirect:/index?updateSuccess=true";
     }
 
