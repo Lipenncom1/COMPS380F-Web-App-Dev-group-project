@@ -26,7 +26,7 @@ public class IndexUser {
     public IndexUser() {}
     public IndexUser(String username, String password, String[] roles) {
         this.username = username;
-        this.password = "{noop}" + password;
+        this.password = password;
         for (String role : roles) {
             this.roles.add(new UserRole(this, role));
         }
@@ -34,7 +34,7 @@ public class IndexUser {
 
     public IndexUser(String username, String password, String fullName, String email, String phone, String[] roles) {
         this.username = username;
-        this.password = "{noop}" + password;
+        this.password = password;
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
@@ -56,8 +56,13 @@ public class IndexUser {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (!password.startsWith("{noop}")) {
+            this.password = "{noop}" + password;
+        } else {
+            this.password = password;
+        }
     }
+
 
     public String getFullName() {
         return fullName;

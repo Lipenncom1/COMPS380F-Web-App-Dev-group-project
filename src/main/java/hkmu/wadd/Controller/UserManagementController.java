@@ -45,8 +45,13 @@ public class UserManagementController {
             return password;
         }
         public void setPassword(String password) {
-            this.password = password;
+            if (!password.startsWith("{noop}")) {
+                this.password = "{noop}" + password;
+            } else {
+                this.password = password;
+            }
         }
+
         public String getFullName() {
             return fullName;
         }
@@ -95,7 +100,11 @@ public class UserManagementController {
         }
 
         public void setPassword(String password) {
-            this.password = password;
+            if (!password.startsWith("{noop}")) {
+                this.password = "{noop}" + password;
+            } else {
+                this.password = password;
+            }
         }
 
         public String[] getRoles() {
@@ -160,7 +169,7 @@ public class UserManagementController {
         editForm form = new editForm();
 
         form.setUsername(username);
-        form.setPassword(user.getPassword());
+        form.setPassword(user.getPassword().replace("{noop}", ""));
         form.setFullName(user.getFullName());
         form.setEmail(user.getEmail());
         form.setPhone(user.getPhone());
