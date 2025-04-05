@@ -47,6 +47,7 @@
   </c:otherwise>
 </c:choose>
 <security:authorize access="hasAnyRole('USER', 'ADMIN')">
+<a href="<c:url value='/index/update'/>">Update Profile</a><br/>
 <c:url var="logoutUrl" value="/logout"/>
 <form action="${logoutUrl}" method="post">
   <input type="submit" value="Log out" />

@@ -1,13 +1,13 @@
 package hkmu.wadd.dao;
 
-import hkmu.wadd.Model.IndexUser;
-import jakarta.annotation.Resource;
+import java.util.List;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import hkmu.wadd.Model.IndexUser;
+import jakarta.annotation.Resource;
 
 @Service
 public class UserManagementService {
@@ -36,4 +36,29 @@ public class UserManagementService {
         IndexUser user = new IndexUser(username, password, fullName, email, phone, roles);
         indexUserRepository.save(user);
     }
+
+    @Transactional
+    public void editUser(String username, String password, String fullName, String email, String phone, String[] roles) {
+        IndexUser user = indexUserRepository.findById(username).orElse(null);
+
+        if (password != null && !password.isBlank()) {
+            user.setPassword(password);
+        }
+        if (fullName != null) user.setFullName(fullName);
+        if (email != null) user.setEmail(email);
+        if (phone != null) user.setPhone(phone);
+//        if (roles != null) {
+//            user.getRoles().clear();
+//            for (String role : roles) {
+//                user.getRoles().add(new UserRole(user, role));
+//            }
+//        }
+        indexUserRepository.save(user);
+    }
+
+    @Transactional
+    public IndexUser findUserByUsername(String username) {
+        return indexUserRepository.findById(username).orElse(null);
+    }
+
 }
