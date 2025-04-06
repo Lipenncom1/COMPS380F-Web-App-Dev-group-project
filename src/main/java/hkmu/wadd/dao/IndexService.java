@@ -132,9 +132,7 @@ public class IndexService {
         IndexUser user = indexUserRepository.findById(username).orElseThrow( () -> new UsernameNotFoundException("User not found"));
 
         //UPDATE-ABLE FIELDS
-        if (password != null && !password.isBlank()) {
-            user.setPassword(password);
-        }
+        if (password != null) user.setPassword(password);
         if (fullName != null) user.setFullName(fullName);
         if (email != null) user.setEmail(email);
         if (phone != null) user.setPhone(phone);

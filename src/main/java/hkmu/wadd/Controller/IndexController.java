@@ -4,19 +4,15 @@ package hkmu.wadd.Controller;
 import hkmu.wadd.Model.Attachment;
 import hkmu.wadd.Model.Index;
 import hkmu.wadd.Model.IndexUser;
-import hkmu.wadd.Model.UserRole;
 import hkmu.wadd.View.DownloadingView;
 import hkmu.wadd.dao.IndexService;
-import hkmu.wadd.dao.IndexUserService;
 import hkmu.wadd.exception.AttachmentNotFound;
 import hkmu.wadd.exception.LectureNotFound;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.hibernate.sql.Update;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,41 +31,27 @@ public class IndexController {
 
     @Resource
     private IndexService indexService;
-    @Autowired
-    private IndexUserService indexUserService;
 
     @GetMapping(value = {"", "/index"})
-    public String list(ModelMap model, Principal principal) {
+    public String list(ModelMap model) {
         model.addAttribute("lectureDatabase", indexService.getLectures());
-        model.addAttribute("username", principal.getName());
         return "index";
     }
 
-    public static class updateForm {
-        private String username;
+    public static class UpdateForm {
         private String password;
         private String fullName;
         private String email;
         private String phone;
         private String[] roles;
         // getters and setters for all properties
-        public String getUsername() {
-            return username;
-        }
-        public void setUsername(String username) {
-            this.username = username;
-        }
 
         public String getPassword() {
             return password;
         }
 
         public void setPassword(String password) {
-            if (!password.startsWith("{noop}")) {
-                this.password = "{noop}" + password;
-            } else {
-                this.password = password;
-            }
+            this.password = password;
         }
 
         public String[] getRoles() {
@@ -187,35 +169,32 @@ public class IndexController {
         return "redirect:/index/view/" + lectureId;
     }
 
-    @GetMapping("/update/{username}")
-    public ModelAndView showUpdateForm(@PathVariable("username") String username, Principal principal, HttpServletRequest request) {
-        IndexUser user = indexService.findUserByUsername(username);
-        ModelAndView modelAndView = new ModelAndView("updateUser");
-        IndexController.updateForm updateform = new IndexController.updateForm();
+    @GetMapping("/update")
+    public ModelAndView showUpdateForm() { return new ModelAndView("updateUser", "updateForm", new UpdateForm()); }
 
-        updateform.setUsername(username);
-        updateform.setPassword(user.getPassword().replace("{noop}", ""));
-        updateform.setFullName(user.getFullName());
-        updateform.setEmail(user.getEmail());
-        updateform.setPhone(user.getPhone());
+//    @PostMapping("/update")
+//    public String updateUserProfile(@Valid @ModelAttribute("updateForm") UpdateForm form, Principal principal) throws IOException {
+//        String username = principal.getName();
+//        indexService.updateUserProfile(username,
+//                form.getPassword(), form.getFullName(),
+//                form.getEmail(), form.getPhone());
+//        return "redirect:/index?updateSuccess=true";
+//    }
 
-        modelAndView.addObject("updateForm", user);
-        return modelAndView;
-    }
+    @PostMapping("/update")
+    public String updateUserProfile(@Valid @ModelAttribute("updateForm") UpdateForm form, Principal principal) throws IOException {
+        String username = principal.getName();
 
-    @PostMapping("/update/{username}")
-    public String updateUserProfile(@PathVariable("username") String username, @Valid @ModelAttribute("updateForm") IndexController.updateForm updateform, Principal principal) throws IOException {
-
-        //Fetch the current user details
+        // Fetch the current user details
         IndexUser currentUser = indexService.findUserByUsername(username);
 
-        //Apply conditional updates only if the fields are not empty
-        String updatedPassword = updateform.getPassword().isEmpty() ? currentUser.getPassword() : updateform.getPassword();
-        String updatedFullName = updateform.getFullName().isEmpty() ? currentUser.getFullName() : updateform.getFullName();
-        String updatedEmail = updateform.getEmail().isEmpty() ? currentUser.getEmail() : updateform.getEmail();
-        String updatedPhone = updateform.getPhone().isEmpty() ? currentUser.getPhone() : updateform.getPhone();
+        // Apply conditional updates only if the fields are not empty
+        String updatedPassword = form.getPassword().isEmpty() ? currentUser.getPassword() : form.getPassword();
+        String updatedFullName = form.getFullName().isEmpty() ? currentUser.getFullName() : form.getFullName();
+        String updatedEmail = form.getEmail().isEmpty() ? currentUser.getEmail() : form.getEmail();
+        String updatedPhone = form.getPhone().isEmpty() ? currentUser.getPhone() : form.getPhone();
 
-        //Pass the updated values to the service layer
+        // Pass the updated values to the service layer
         indexService.updateUserProfile(username, updatedPassword, updatedFullName, updatedEmail, updatedPhone);
 
         return "redirect:/index?updateSuccess=true";
