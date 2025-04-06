@@ -20,19 +20,19 @@ Date and Time: 31/03/2025 4:48 PM
 </form>
 <form:form action="${pageContext.request.contextPath}/user/register" method="POST" modelAttribute="registrationForm">
     <label for="username">Username</label>
-    <form:input path="username" id="username" required="required"/>
+    <form:input path="username" id="username" required="required"/><br/>
 
     <label for="password">Password</label>
-    <form:input type="password" path="password" id="password" required="required"/>
+    <form:input type="password" path="password" id="password" required="required"/><br/>
 
     <label for="fullName">Full Name</label>
-    <form:input path="fullName" id="fullName" required="required"/>
+    <form:input path="fullName" id="fullName" required="required"/><br/>
 
     <label for="email">Email</label>
-    <form:input type="email" path="email" id="email" required="required"/>
+    <form:input type="email" path="email" id="email" required="required"/><br/>
 
     <label for="phone">Phone</label>
-    <form:input path="phone" id="phone" required="required"/>
+    <form:input path="phone" id="phone" required="required"/><br/>
 
     <form:hidden path="roles" value="ROLE_USER"/> <!--Default role-->
 
