@@ -32,7 +32,7 @@
         <a href="<c:url value="/index/view/${entry.id}" />">
       </security:authorize>
 
-        <c:out value="${entry.lectureTitle}"/></a>
+      <c:out value="${entry.lectureTitle}"/></a>
 
       <security:authorize access="hasRole('ADMIN')">
         [<a href="<c:url value="/index/editLecture/${entry.id}" />">Edit</a>]
@@ -47,12 +47,14 @@
   </c:otherwise>
 </c:choose>
 <security:authorize access="hasAnyRole('USER', 'ADMIN')">
-<a href="<c:url value='/index/update'/>">Update Profile</a><br/>
+<security:authentication property="principal.username" var="loggedInUser" />
+<a href="<c:url value='/index/update/${loggedInUser}'/>">Update Profile</a><br/>
+
 <c:url var="logoutUrl" value="/logout"/>
 <form action="${logoutUrl}" method="post">
   <input type="submit" value="Log out" />
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</security:authorize>
+  </security:authorize>
 </form>
 </body>
 </html>
