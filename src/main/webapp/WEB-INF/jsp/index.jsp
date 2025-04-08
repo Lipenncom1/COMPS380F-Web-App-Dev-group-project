@@ -1,0 +1,71 @@
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Index</title>
+</head>
+<body>
+<h2>Lectures & Polls</h2>
+<security:authorize access="isAnonymous()">
+  <a href="<c:url value="/login"/>">Login</a><br />
+</security:authorize>
+
+<security:authorize access="hasRole('ADMIN')">
+  <a href="<c:url value="/user" />">Manage User Accounts</a><br /><br />
+</security:authorize>
+
+<security:authorize access="hasRole('ADMIN')">
+  <a href="<c:url value="/index/addLecture" />">Add a lecture</a><br/><br/>
+</security:authorize>
+
+<h3>Lectures</h3>
+<table>
+  <c:forEach items="${lectureDatabase}" var="lecture">
+    <tr>
+      <td>${lecture.lectureTitle}</td>
+      <td>
+        <a href="<c:url value="/index/view/${lecture.id}"/>">View</a>
+        <security:authorize access="hasRole('ADMIN')">
+          <a href="<c:url value="/index/editLecture/${lecture.id}"/>">Edit</a>
+          <a href="<c:url value="/index/delete/${lecture.id}"/>">Delete</a>
+        </security:authorize>
+      </td>
+    </tr>
+  </c:forEach>
+</table>
+
+<h3>Polls</h3>
+<table>
+  <c:forEach items="${pollDatabase}" var="poll">
+    <tr>
+      <td>${poll.question}</td>
+      <td>
+        <a href="<c:url value="/index/viewPoll/${poll.id}"/>">View</a>
+        <security:authorize access="hasRole('ADMIN')">
+          <a href="<c:url value="/index/editPoll/${poll.id}"/>">Edit</a>
+          <a href="<c:url value="/index/deletePoll/${poll.id}"/>">Delete</a>
+        </security:authorize>
+      </td>
+    </tr>
+  </c:forEach>
+</table>
+
+<security:authorize access="hasRole('ADMIN')">
+  <p><a href="<c:url value="/index/addPoll"/>">Add New Poll</a></p>
+</security:authorize>
+
+<security:authorize access="hasRole('ADMIN')">
+  <a href="<c:url value="/index/voteHistories" />">View Poll History</a><br/><br/>
+</security:authorize>
+
+<security:authorize access="hasAnyRole('USER', 'ADMIN')">
+<c:url var="logoutUrl" value="/logout"/>
+<form action="${logoutUrl}" method="post">
+  <input type="submit" value="Log out" />
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</security:authorize>
+</form>
+</body>
+</html>
