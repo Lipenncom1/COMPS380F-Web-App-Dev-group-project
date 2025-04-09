@@ -7,6 +7,7 @@ import hkmu.wadd.Model.IndexUser;
 import hkmu.wadd.View.DownloadingView;
 import hkmu.wadd.dao.IndexService;
 import hkmu.wadd.dao.IndexUserService;
+import hkmu.wadd.dao.PollService;
 import hkmu.wadd.exception.AttachmentNotFound;
 import hkmu.wadd.exception.LectureNotFound;
 import jakarta.annotation.Resource;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
+import hkmu.wadd.dao.PollService;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -32,14 +34,19 @@ public class IndexController {
 
     @Resource
     private IndexService indexService;
+
     @Autowired
     private IndexUserService indexUserService;
+
+    @Resource
+    private PollService pollService;
 
     @GetMapping(value = {"", "/index"})
 //    public String list(ModelMap model, Principal principal) {
     public String list(ModelMap model) {
 
         model.addAttribute("lectureDatabase", indexService.getLectures());
+        model.addAttribute("pollDatabase", pollService.getPolls());
 //        model.addAttribute("username", principal.getName());
         return "index";
     }

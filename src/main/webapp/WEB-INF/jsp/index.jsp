@@ -1,5 +1,5 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
-
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -46,6 +46,33 @@
     </c:forEach>
   </c:otherwise>
 </c:choose>
+
+
+<h3>Polls</h3>
+<table>
+  <c:forEach items="${pollDatabase}" var="poll">
+    <tr>
+      <td>${poll.question}
+        <security:authorize access="hasAnyRole('ADMIN','USER')">
+        <a href="<c:url value="/index/viewPoll/${poll.id}"/>">View</a>
+          </security:authorize>
+        <security:authorize access="hasRole('ADMIN')">
+          <a href="<c:url value="/index/editPoll/${poll.id}"/>">Edit</a>
+          <a href="<c:url value="/index/deletePoll/${poll.id}"/>">Delete</a>
+        </security:authorize>
+      </td>
+    </tr>
+  </c:forEach>
+</table>
+
+<security:authorize access="hasRole('ADMIN')">
+  <p><a href="<c:url value="/index/addPoll"/>">Add New Poll</a></p>
+</security:authorize>
+
+<security:authorize access="hasRole('ADMIN')">
+  <a href="<c:url value="/index/voteHistories" />">View Poll History</a><br/><br/>
+</security:authorize>
+
 <security:authorize access="hasAnyRole('USER', 'ADMIN')">
 <security:authentication property="principal.username" var="loggedInUser" />
 <a href="<c:url value='/index/update/${loggedInUser}'/>">Update Profile</a><br/>

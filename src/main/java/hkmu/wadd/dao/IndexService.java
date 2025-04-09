@@ -30,6 +30,7 @@ public class IndexService {
 
     @Resource
     private AttachmentRepository attachmentRepository;
+
     @Autowired
     private IndexUserRepository indexUserRepository;
 

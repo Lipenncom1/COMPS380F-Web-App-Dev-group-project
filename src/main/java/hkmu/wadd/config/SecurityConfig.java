@@ -16,10 +16,9 @@ public class SecurityConfig {
             throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/register").permitAll() //Allow access to register endpoint first
-                        .requestMatchers("/index/delete/**","/user/**", "/index/editLecture/**","/index/addLecture/**").hasRole("ADMIN")
-                        .requestMatchers("/view/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/h2-console/**","/css/**","/js/**").permitAll()
+                        .requestMatchers("/user/register","/h2-console/**","/css/**","/js/**", "/index", "/index/index").permitAll() //Allow access to register endpoint first
+                        .requestMatchers("/index/delete/**","/user/**", "/index/editLecture/**","/index/addLecture/**","/index/addPoll/**", "/index/editPoll/**", "/index/deletePoll/**", "/index/voteHistories").hasRole("ADMIN")
+                        .requestMatchers("/view/**","/index/vote/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
