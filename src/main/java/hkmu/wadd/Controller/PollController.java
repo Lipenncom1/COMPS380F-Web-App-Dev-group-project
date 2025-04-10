@@ -1,11 +1,13 @@
 package hkmu.wadd.Controller;
 
 import hkmu.wadd.Model.Poll;
+import hkmu.wadd.Model.PollComment;
 import hkmu.wadd.Model.UserVote;
 import hkmu.wadd.dao.PollService;
 import hkmu.wadd.exception.PollNotFound;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -108,14 +110,14 @@ public class PollController {
     @GetMapping("/viewPoll/{pollId}")
     public String viewPoll(@PathVariable("pollId") long pollId, Model model) throws PollNotFound {
         Poll poll = pollService.getPoll(pollId);
-        List<UserVote> votes = pollService.getAllVotesByPollId(pollId);
+        List<PollComment> comments = pollService.getCommentsByPollId(pollId);
 
         model.addAttribute("poll", poll);
-        model.addAttribute("userVote", pollService.getUserVote(pollId));
-        model.addAttribute("votes", votes);
+        model.addAttribute("comments", comments);
 
         return "viewPoll";
     }
+
 
     @PostMapping("/vote/{pollId}")
     public String vote(@PathVariable("pollId") long pollId,
@@ -188,6 +190,21 @@ public class PollController {
         pollService.delete(pollId);
         System.out.println("Poll deleted successfully");
         return "redirect:/index";
+    }
+
+    @PostMapping("/viewPoll/{pollId}/addComment")
+    public String addComment(@PathVariable long pollId, @RequestParam String commentText,
+                             Authentication authentication) throws PollNotFound {
+        String username = authentication.getName(); // Ensure `username` isn't null
+        pollService.addComment(pollId, username, commentText); // Add comment
+        return "redirect:/index/viewPoll/" + pollId; // Redirect back to the poll view
+    }
+
+
+    @PostMapping("/viewPoll/{pollId}/deleteComment/{commentId}")
+    public String deleteComment(@PathVariable long pollId, @PathVariable long commentId) {
+        pollService.deleteComment(commentId);
+        return "redirect:/index/viewPoll/" + pollId;
     }
 
     @ExceptionHandler({PollNotFound.class})

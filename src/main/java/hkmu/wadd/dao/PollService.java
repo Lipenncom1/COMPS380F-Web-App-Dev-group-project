@@ -1,6 +1,7 @@
 package hkmu.wadd.dao;
 
 import hkmu.wadd.Model.Poll;
+import hkmu.wadd.Model.PollComment;
 import hkmu.wadd.Model.UserVote;
 import hkmu.wadd.exception.PollNotFound;
 import jakarta.annotation.Resource;
@@ -129,5 +130,31 @@ public class PollService {
         return userVoteRepository.findByUsernameAndPollId(username, pollId)
                 .map(UserVote::getVoteOption)
                 .orElse(null);
+    }
+
+    @Resource
+    private PollCommentRepository pollCommentRepository;
+
+    // Existing methods ...
+
+    @Transactional
+    public List<PollComment> getCommentsByPollId(long pollId) {
+        return pollCommentRepository.findByPollId(pollId);
+    }
+
+    @Transactional
+    public void addComment(long pollId, String username, String commentText) {
+        PollComment comment = new PollComment();
+        comment.setPollId(pollId);
+        comment.setUsername(username);
+        comment.setCommentText(commentText);
+        comment.setCreatedAt(java.time.LocalDateTime.now().toString());
+        pollCommentRepository.save(comment);
+    }
+
+
+    @Transactional
+    public void deleteComment(long commentId) {
+        pollCommentRepository.deleteById(commentId);
     }
 }

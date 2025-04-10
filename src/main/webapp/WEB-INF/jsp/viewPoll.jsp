@@ -81,6 +81,7 @@
 
     <div id="error-message" class="error-message">Please choose a choice</div>
 
+
     <c:if test="${not empty errorMessage}">
         <div class="error-message" style="display: block;">
             <c:out value="${errorMessage}"/>
@@ -96,6 +97,15 @@
 <security:authorize access="hasRole('ADMIN')">
     [<a href="<c:url value="/index/editPoll/${poll.id}"/>">Edit Poll</a>]
     [<a href="<c:url value="/index/deletePoll/${poll.id}"/>">Delete Poll</a>]
+</security:authorize>
+
+
+<security:authorize access="hasAnyRole('USER','ADMIN')">
+    <form action="<c:url value="/index/viewPoll/${poll.id}/addComment"/>" method="post">
+        <textarea name="commentText" ></textarea>
+        <input type="submit" value="Add Comment"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
 </security:authorize>
 
 <p><a href="<c:url value="/index"/>">Return to Index</a></p>
