@@ -100,6 +100,30 @@
 </security:authorize>
 
 
+<h2>Comments</h2>
+<c:choose>
+    <c:when test="${not empty pcomments}">
+        <ul>
+            <c:forEach items="${pcomments}" var="comment">
+                <li>
+                    <strong><c:out value="${comment.username}"/>:</strong>
+                    <c:out value="${comment.commentText}"/>
+                    <security:authorize access="hasAnyRole('ADMIN')">
+                        <form method="post" action="<c:url value='/index/viewPoll/${pollId}/deleteComment/${comment.id}'/>" style="display: inline;">
+                            <input type="submit" value="Delete"/>
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        </form>
+                    </security:authorize>
+                </li>
+            </c:forEach>
+        </ul>
+    </c:when>
+    <c:otherwise>
+        <p>No comments yet</p>
+    </c:otherwise>
+</c:choose>
+
+
 <security:authorize access="hasAnyRole('USER','ADMIN')">
     <form action="<c:url value="/index/viewPoll/${poll.id}/addComment"/>" method="post">
         <textarea name="commentText" ></textarea>

@@ -113,7 +113,7 @@ public class PollController {
         List<PollComment> comments = pollService.getCommentsByPollId(pollId);
 
         model.addAttribute("poll", poll);
-        model.addAttribute("comments", comments);
+        model.addAttribute("pcomments", comments);
 
         return "viewPoll";
     }
