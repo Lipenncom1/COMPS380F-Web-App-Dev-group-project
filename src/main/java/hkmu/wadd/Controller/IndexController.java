@@ -1,20 +1,18 @@
 package hkmu.wadd.Controller;
 
 
-import hkmu.wadd.Model.Attachment;
-import hkmu.wadd.Model.Index;
-import hkmu.wadd.Model.IndexUser;
+import hkmu.wadd.Model.*;
 import hkmu.wadd.View.DownloadingView;
-import hkmu.wadd.dao.IndexService;
-import hkmu.wadd.dao.IndexUserService;
-import hkmu.wadd.dao.PollService;
+import hkmu.wadd.dao.*;
 import hkmu.wadd.exception.AttachmentNotFound;
 import hkmu.wadd.exception.LectureNotFound;
+import hkmu.wadd.exception.PollNotFound;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +23,9 @@ import hkmu.wadd.dao.PollService;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -34,6 +34,9 @@ public class IndexController {
 
     @Resource
     private IndexService indexService;
+
+    @Resource
+    private LectureCommentsService lectureCommentsService;
 
     @Autowired
     private IndexUserService indexUserService;
@@ -231,4 +234,36 @@ public class IndexController {
         return new ModelAndView("error", "message", e.getMessage());
     }
 
+
+    @GetMapping("/viewAllComments")
+    public String viewAllComments(Model model) {
+        // Fetch lecture comments and their corresponding lectures
+        List<LectureComments> lectureComments = lectureCommentsService.getAllLectureComments();
+        Map<Long, String> lectureTitles = new HashMap<>(); // Maps lecture ID to its title
+        for (LectureComments comment : lectureComments) {
+            Index lecture = comment.getLecture();
+            lectureTitles.put(lecture.getId(), lecture.getLectureTitle());
+        }
+
+        // Fetch poll comments and their corresponding poll questions
+        List<PollComment> pollComments = pollService.getAllPollComments();
+        Map<Long, String> pollQuestions = new HashMap<>(); // Maps poll ID to its question
+        for (PollComment comment : pollComments) {
+            Poll poll = null;
+            try {
+                poll = pollService.getPoll(comment.getPollId());
+            } catch (PollNotFound e) {
+                throw new RuntimeException(e);
+            }
+            pollQuestions.put(poll.getId(), poll.getQuestion());
+        }
+
+        // Pass data to the model
+        model.addAttribute("lectureComments", lectureComments);
+        model.addAttribute("lectureTitles", lectureTitles);
+        model.addAttribute("pollComments", pollComments);
+        model.addAttribute("pollQuestions", pollQuestions);
+
+        return "viewAllComments"; // Refers to the JSP view file
+    }
 }

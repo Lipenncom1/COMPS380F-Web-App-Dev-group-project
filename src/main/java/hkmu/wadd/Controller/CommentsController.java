@@ -26,8 +26,7 @@ public class CommentsController {
     @Resource
     private LectureCommentsService lectureCommentsService;
 
-    @Resource
-    private PollService pollService;
+
 
     @PostMapping("/{lectureId}/add")
     public String addComment(@PathVariable long lectureId, @RequestParam String commentText,
@@ -48,37 +47,6 @@ public class CommentsController {
         return "redirect:/index/view/" + lectureId;
     }
 
-    @GetMapping("/viewAllComments")
-    public String viewAllComments(Model model) {
-        // Fetch lecture comments and their corresponding lectures
-        List<LectureComments> lectureComments = lectureCommentsService.getAllLectureComments();
-        Map<Long, String> lectureTitles = new HashMap<>(); // Maps lecture ID to its title
-        for (LectureComments comment : lectureComments) {
-            Index lecture = comment.getLecture();
-            lectureTitles.put(lecture.getId(), lecture.getLectureTitle());
-        }
-
-        // Fetch poll comments and their corresponding poll questions
-        List<PollComment> pollComments = pollService.getAllPollComments();
-        Map<Long, String> pollQuestions = new HashMap<>(); // Maps poll ID to its question
-        for (PollComment comment : pollComments) {
-            Poll poll = null;
-            try {
-                poll = pollService.getPoll(comment.getPollId());
-            } catch (PollNotFound e) {
-                throw new RuntimeException(e);
-            }
-            pollQuestions.put(poll.getId(), poll.getQuestion());
-        }
-
-        // Pass data to the model
-        model.addAttribute("lectureComments", lectureComments);
-        model.addAttribute("lectureTitles", lectureTitles);
-        model.addAttribute("pollComments", pollComments);
-        model.addAttribute("pollQuestions", pollQuestions);
-
-        return "viewAllComments"; // Refers to the JSP view file
-    }
 
 
 
