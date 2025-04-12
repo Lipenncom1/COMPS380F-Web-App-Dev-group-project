@@ -157,4 +157,13 @@ public class PollService {
     public void deleteComment(long commentId) {
         pollCommentRepository.deleteById(commentId);
     }
+
+    @Transactional
+    public List<PollComment> getAllPollComments() {
+
+        System.out.println("Poll Comments: " + pollCommentRepository.findAll());
+
+        return pollCommentRepository.findAll();
+    }
+
 }

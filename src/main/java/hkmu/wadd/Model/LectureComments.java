@@ -19,9 +19,10 @@ public class LectureComments {
     @Column(name = "comment_text")
     private String commentText;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lecture_id")
     private Index lecture;
+
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

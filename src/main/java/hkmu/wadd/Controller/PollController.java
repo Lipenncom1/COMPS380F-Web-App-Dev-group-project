@@ -103,7 +103,7 @@ public class PollController {
         model.addAttribute("polls", polls);
         model.addAttribute("votesByPoll", votesByPoll);
 
-        return "voteHistory"; // This links to the new JSP we'll create
+        return "voteHistory";
     }
 
 

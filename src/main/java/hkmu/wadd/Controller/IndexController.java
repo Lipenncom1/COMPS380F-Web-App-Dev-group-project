@@ -47,7 +47,6 @@ public class IndexController {
 
         model.addAttribute("lectureDatabase", indexService.getLectures());
         model.addAttribute("pollDatabase", pollService.getPolls());
-//        model.addAttribute("username", principal.getName());
         return "index";
     }
 

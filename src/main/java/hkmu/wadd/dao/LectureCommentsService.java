@@ -29,13 +29,13 @@ public class LectureCommentsService {
     }
 
     @Transactional
-    public LectureComments addComments(long lectureId, String username, String commentText) throws LectureNotFound {
+    public void addComments(long lectureId, String username, String commentText) throws LectureNotFound {
         Index lecture =  indexRepository.findById(lectureId).orElse(null);
         LectureComments comments = new LectureComments();
         comments.setLecture(lecture);
         comments.setUsername(username);
         comments.setCommentText(commentText);
-        return lectureCommentsRepository.save(comments);
+        lectureCommentsRepository.save(comments);
     }
 
     @Transactional
@@ -45,16 +45,10 @@ public class LectureCommentsService {
         }
         lectureCommentsRepository.deleteByIdAndLectureId(commentId, lectureId);
     }
+    @Transactional
+    public List<LectureComments> getAllLectureComments() {
+        System.out.println("Lecture Comments: " + lectureCommentsRepository.findAll());
+        return lectureCommentsRepository.findAll();
+    }
+
 }
-
-
-//    @Transactional
-//    public void deleteLectureComment(long comment_id, long lectureId) throws LectureNotFound{
-//        Index deletedLecture = LectureCommentsRepository.findById(comment_id).orElse(null);
-//        if (deletedLecture == null) {
-//            throw new LectureNotFound(comment_id);
-//        }
-//        LectureCommentsRepository.delete(deletedLecture);
-//    }
-//
-//}
