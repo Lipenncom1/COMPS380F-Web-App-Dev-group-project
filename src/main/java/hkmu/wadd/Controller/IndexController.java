@@ -11,6 +11,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -265,5 +266,36 @@ public class IndexController {
         model.addAttribute("pollQuestions", pollQuestions);
 
         return "viewAllComments"; // Refers to the JSP view file
+    }
+
+
+    //user own comments getter
+    @GetMapping("/userOwnComments")
+    public String getUserComments(Model model, Authentication authentication) {
+        String username = authentication.getName();
+
+        List<LectureComments> userLectureComments = lectureCommentsService.getLectureCommentsByUsername(username);
+        Map<Long, String> lectureTitles = new HashMap<>();
+        for (LectureComments comment : userLectureComments) {
+            Index lecture = comment.getLecture();
+            lectureTitles.put(lecture.getId(), lecture.getLectureTitle());
+        }
+        model.addAttribute("userLectureComments", userLectureComments);
+        model.addAttribute("lectureTitles", lectureTitles);
+
+        List<PollComment> userPollComments = pollService.getPollCommentsByUsername(username);
+        Map<Long, String> pollQuestions = new HashMap<>();
+        for (PollComment comment : userPollComments) {
+            try {
+                Poll poll = pollService.getPoll(comment.getPollId());
+                pollQuestions.put(poll.getId(), poll.getQuestion());
+            } catch (PollNotFound e) {
+                pollQuestions.put(comment.getPollId(), "[Deleted Poll]");
+            }
+        }
+        model.addAttribute("userPollComments", userPollComments);
+        model.addAttribute("pollQuestions", pollQuestions);
+
+        return "userOwnComments";
     }
 }

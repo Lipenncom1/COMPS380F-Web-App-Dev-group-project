@@ -73,8 +73,12 @@
   <a href="<c:url value="/index/voteHistories" />">View All Poll History</a><br/><br/>
 </security:authorize>
 
-<security:authorize access="hasAnyRole('ADMIN','USER')">
+<security:authorize access="hasRole('ADMIN')">
   <a href="<c:url value="/index/viewAllComments"/>"> View All Comments History</a><br/><br/>
+</security:authorize>
+
+<security:authorize access="hasAnyRole('USER', 'ADMIN')">
+  <a href="<c:url value="/index/userOwnComments"/>"> View Your Comments History</a><br/><br/>
 </security:authorize>
 
 <security:authorize access="hasAnyRole('USER', 'ADMIN')">

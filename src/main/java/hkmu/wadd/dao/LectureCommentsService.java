@@ -51,4 +51,10 @@ public class LectureCommentsService {
         return lectureCommentsRepository.findAll();
     }
 
+    //add 4.13
+    @Transactional
+    public List<LectureComments> getLectureCommentsByUsername(String username) {
+        return lectureCommentsRepository.findByUsername(username);
+    }
+
 }

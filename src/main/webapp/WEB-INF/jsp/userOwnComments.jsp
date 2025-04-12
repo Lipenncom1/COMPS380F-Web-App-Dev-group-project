@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>All Comments</title>
+    <title>Your Own Comments</title>
 </head>
 <body>
-<h1>All Comments</h1>
+<h1>Your Own Comments</h1>
 
 <h2>Lecture Comments</h2>
-<security:authorize access="hasRole('ADMIN')">
+
+<security:authorize access="hasAnyRole('USER', 'ADMIN')">
     <ul>
-        <c:forEach var="comment" items="${lectureComments}">
+        <c:forEach var="comment" items="${userLectureComments}">
             <li>
                 <strong>Lecture:</strong> ${lectureTitles[comment.lecture.id]}<br/>
                 <strong>${comment.username}</strong>: ${comment.commentText}<br/>
@@ -20,9 +21,10 @@
 </security:authorize>
 
 <h2>Poll Comments</h2>
-<security:authorize access="hasRole('ADMIN')">
+
+<security:authorize access="hasAnyRole('USER', 'ADMIN')">
     <ul>
-        <c:forEach var="comment" items="${pollComments}">
+        <c:forEach var="comment" items="${userPollComments}">
             <li>
                 <strong>Poll Question:</strong> ${pollQuestions[comment.pollId]}<br/>
                 <strong>${comment.username}</strong>: ${comment.commentText}<br/>

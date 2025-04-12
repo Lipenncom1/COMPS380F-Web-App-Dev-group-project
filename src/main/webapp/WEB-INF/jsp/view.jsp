@@ -22,7 +22,8 @@
     </security:authorize>
 
     <security:authorize access="hasRole('ADMIN')">
-      [<a href="<c:url value="/index/delete/${lectureId}" />">Delete</a>]
+      [<a href="<c:url value="/index/${lectureId}/delete/${attachment.id}" />">Delete</a>]
+
     </security:authorize>
     <br />
 
@@ -37,6 +38,7 @@
         <li>
           <strong><c:out value="${comment.username}"/>:</strong>
           <c:out value="${comment.commentText}"/>
+
           <security:authorize access="hasRole('ADMIN')">
             <form method="post" action="<c:url value='/comments/${lectureId}/delete/${comment.commentId}'/>" style="display: inline;">
               <input type="submit" value="Delete"/>
@@ -52,7 +54,7 @@
   </c:otherwise>
 </c:choose>
 
-<security:authorize access="hasRole('USER')">
+<security:authorize access="hasAnyRole('USER', 'ADMIN')">
   <form action="<c:url value="/comments/${lecture.id}/add"/>" method="post">
     <textarea name="commentText" required></textarea>
     <input type="submit" value="Add Comment"/>

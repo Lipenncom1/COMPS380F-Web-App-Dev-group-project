@@ -166,4 +166,9 @@ public class PollService {
         return pollCommentRepository.findAll();
     }
 
+    //add 4.13
+    @Transactional
+    public List<PollComment> getPollCommentsByUsername(String username) {
+        return pollCommentRepository.findByUsername(username);
+    }
 }
