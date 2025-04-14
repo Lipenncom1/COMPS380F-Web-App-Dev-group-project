@@ -10,5 +10,5 @@ public interface UserVoteRepository extends JpaRepository<UserVote, Long> {
     Optional<UserVote> findByUsernameAndPollId(String username, long pollId);
     List<UserVote> findByPollId(long pollId);
     void deleteByPollId(long pollId);
-
+    List<UserVote> findByUsername(String username);
 }

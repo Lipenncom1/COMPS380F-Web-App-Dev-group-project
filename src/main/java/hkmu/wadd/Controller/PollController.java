@@ -19,6 +19,8 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/index")
@@ -210,5 +212,23 @@ public class PollController {
     @ExceptionHandler({PollNotFound.class})
     public ModelAndView error(Exception e) {
         return new ModelAndView("error", "message", e.getMessage());
+    }
+
+    @GetMapping("/myVoteHistories")
+    public String getMyVoteHistories(Model model, Authentication authentication) {
+        String username = authentication.getName();
+        List<UserVote> myVotes = pollService.getVotesByUsername(username);
+        Set<Long> pollIds = myVotes.stream()
+                .map(UserVote::getPollId)
+                .collect(Collectors.toSet());
+
+        Map<Long, Poll> polls = pollService.getPollsByIds(pollIds);
+        Map<Long, List<UserVote>> myVotesByPoll = myVotes.stream()
+                .collect(Collectors.groupingBy(UserVote::getPollId));
+
+        model.addAttribute("polls", polls.values());
+        model.addAttribute("myVotesByPoll", myVotesByPoll);
+
+        return "myVoteHistory";
     }
 }

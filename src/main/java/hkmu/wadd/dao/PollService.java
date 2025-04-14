@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class PollService {
@@ -170,5 +174,16 @@ public class PollService {
     @Transactional
     public List<PollComment> getPollCommentsByUsername(String username) {
         return pollCommentRepository.findByUsername(username);
+    }
+
+    @Transactional
+    public List<UserVote> getVotesByUsername(String username) {
+        return userVoteRepository.findByUsername(username);
+    }
+
+    @Transactional
+    public Map<Long, Poll> getPollsByIds(Set<Long> pollIds) {
+        return pollRepository.findAllById(pollIds).stream()
+                .collect(Collectors.toMap(Poll::getId, Function.identity()));
     }
 }
