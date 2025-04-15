@@ -26,7 +26,7 @@
   </c:when>
   <c:otherwise>
     <c:forEach items="${lectureDatabase}" var="entry">
-      Lecture ${entry.id}:
+      Lecture:
 
       <security:authorize access="hasAnyRole('ADMIN','USER')">
         <a href="<c:url value="/index/view/${entry.id}" />">

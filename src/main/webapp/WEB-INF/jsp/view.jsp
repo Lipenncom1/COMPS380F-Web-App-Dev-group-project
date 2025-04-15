@@ -7,8 +7,7 @@
   <title>View</title>
 </head>
 <body>
-<h2>Lecture #${lectureId}: <c:out value="${lecture.lectureTitle}"/></h2>
-<%--[<a href="<c:url value="/index/delete/${lecture.id}" />">Delete</a>]<br/><br/>--%>
+<h2>Lecture: <c:out value="${lecture.lectureTitle}"/></h2>
 <c:if test="${!empty lecture.attachments}">
   Attachments:
   <c:forEach items="${lecture.attachments}" var="attachment" varStatus="status">
