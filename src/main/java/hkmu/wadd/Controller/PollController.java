@@ -115,6 +115,7 @@ public class PollController {
         List<PollComment> comments = pollService.getCommentsByPollId(pollId);
 
         model.addAttribute("poll", poll);
+        model.addAttribute("userVote", pollService.getUserVote(pollId));
         model.addAttribute("pcomments", comments);
 
         return "viewPoll";
@@ -125,9 +126,7 @@ public class PollController {
     public String vote(@PathVariable("pollId") long pollId,
                        @RequestParam(value = "option", required = false) String option,
                        HttpServletRequest request, Model model) throws PollNotFound {
-//        if (!request.isUserInRole("ROLE_USER")) {
-//            return "redirect:/login";
-//        }
+
 
         if (option == null || option.isEmpty()) {
             model.addAttribute("errorMessage", "Please choose a choice");
@@ -145,8 +144,7 @@ public class PollController {
     }
 
     @GetMapping("/editPoll/{pollId}")
-    public ModelAndView editPoll(@PathVariable("pollId") long pollId,
-                                 Principal principal, HttpServletRequest request) throws PollNotFound {
+    public ModelAndView editPoll(@PathVariable("pollId") long pollId, HttpServletRequest request) throws PollNotFound {
         Poll poll = pollService.getPoll(pollId);
 
         if (!request.isUserInRole("ROLE_ADMIN")) {
@@ -168,8 +166,7 @@ public class PollController {
     }
 
     @PostMapping("/editPoll/{pollId}")
-    public String editPoll(@PathVariable("pollId") long pollId, PollForm form,
-                           Principal principal, HttpServletRequest request) throws PollNotFound {
+    public String editPoll(@PathVariable("pollId") long pollId, PollForm form, HttpServletRequest request) throws PollNotFound {
         if (!request.isUserInRole("ROLE_ADMIN")) {
             return "redirect:/index";
         }
@@ -180,8 +177,7 @@ public class PollController {
     }
 
     @GetMapping("/deletePoll/{pollId}")
-    public String deletePoll(@PathVariable("pollId") long pollId,
-                             Principal principal, HttpServletRequest request) throws PollNotFound {
+    public String deletePoll(@PathVariable("pollId") long pollId, HttpServletRequest request) throws PollNotFound {
         System.out.println("Attempting to delete poll with ID: " + pollId);
         System.out.println("User roles: " + request.getUserPrincipal().getName());
         if (!request.isUserInRole("ROLE_ADMIN")) {
