@@ -20,7 +20,6 @@ public class UserRegistration {
     @NotEmpty(message = "Phone is required")
     private String phone;
 
-    // Getters and Setters
     public String getUsername() {
         return username;
     }

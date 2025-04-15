@@ -1,9 +1,3 @@
-<%--
-Created By: Maria D
-Description: Registration page for users, uses Spring Boot JSP form declarations
-Date and Time: 31/03/2025 4:48 PM
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>

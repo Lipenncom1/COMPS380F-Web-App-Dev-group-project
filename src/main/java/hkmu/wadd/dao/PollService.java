@@ -85,7 +85,6 @@ public class PollService {
         if (poll == null) {
             throw new PollNotFound(id);
         }
-        // Delete all votes associated with this poll
         userVoteRepository.deleteByPollId(id);
         pollRepository.delete(poll);
     }
@@ -100,7 +99,6 @@ public class PollService {
         String username = authenticationService.getCurrentUsername();
         UserVote existingVote = userVoteRepository.findByUsernameAndPollId(username, id).orElse(null);
 
-        // 如果用户之前投过票,先减少之前的计数
         if (existingVote != null) {
             String previousOption = existingVote.getVoteOption();
             switch (previousOption) {
@@ -117,7 +115,6 @@ public class PollService {
             existingVote.setVoteOption(option);
         }
 
-        // 增加新选项的计数
         switch (option) {
             case "A": poll.setCountA(poll.getCountA() + 1); break;
             case "B": poll.setCountB(poll.getCountB() + 1); break;
@@ -138,8 +135,6 @@ public class PollService {
 
     @Resource
     private PollCommentRepository pollCommentRepository;
-
-    // Existing methods ...
 
     @Transactional
     public List<PollComment> getCommentsByPollId(long pollId) {
@@ -170,7 +165,6 @@ public class PollService {
         return pollCommentRepository.findAll();
     }
 
-    //add 4.13
     @Transactional
     public List<PollComment> getPollCommentsByUsername(String username) {
         return pollCommentRepository.findByUsername(username);

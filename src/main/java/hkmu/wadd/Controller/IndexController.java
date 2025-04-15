@@ -10,7 +10,6 @@ import hkmu.wadd.exception.PollNotFound;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,14 +38,10 @@ public class IndexController {
     @Resource
     private LectureCommentsService lectureCommentsService;
 
-    @Autowired
-    private IndexUserService indexUserService;
-
     @Resource
     private PollService pollService;
 
     @GetMapping(value = {"", "/index"})
-//    public String list(ModelMap model, Principal principal) {
     public String list(ModelMap model) {
 
         model.addAttribute("lectureDatabase", indexService.getLectures());
@@ -61,10 +56,11 @@ public class IndexController {
         private String email;
         private String phone;
         private String[] roles;
-        // getters and setters for all properties
+
         public String getUsername() {
             return username;
         }
+
         public void setUsername(String username) {
             this.username = username;
         }
@@ -114,12 +110,15 @@ public class IndexController {
         public String getLectureTitle() {
             return lectureTitle;
         }
+
         public void setLectureTitle(String lectureTitle) {
             this.lectureTitle = lectureTitle;
         }
+
         public List<MultipartFile> getAttachments() {
             return attachments;
         }
+
         public void setAttachments(List<MultipartFile> attachments) {
             this.attachments = attachments;
         }
@@ -141,6 +140,7 @@ public class IndexController {
         model.addAttribute("lecture", lecture);
         return "view";
     }
+
     @GetMapping("/{lectureId}/attachment/{attachment:.+}")
     public View download(@PathVariable("lectureId") long lectureId,
                          @PathVariable("attachment") UUID attachmentId)
@@ -166,13 +166,11 @@ public class IndexController {
     }
 
     @GetMapping("/editLecture/{lectureId}")
-    public ModelAndView showEdit(@PathVariable("lectureId") long lectureId,
-                                 Principal principal, HttpServletRequest request)
+    public ModelAndView showEdit(@PathVariable("lectureId") long lectureId, HttpServletRequest request)
             throws LectureNotFound {
         Index lecture = indexService.getLecture(lectureId);
         if (lecture == null
                 || (!request.isUserInRole("ROLE_ADMIN"))) {
-//                && !principal.getName().equals(lecture.getLectureTitle()
             return new ModelAndView(new RedirectView("/index", true));
         }
         ModelAndView modelAndView = new ModelAndView("editLecture");
@@ -183,13 +181,11 @@ public class IndexController {
     }
 
     @PostMapping("/editLecture/{lectureId}")
-    public String edit(@PathVariable("lectureId") long lectureId, Form form,
-                       Principal principal, HttpServletRequest request)
+    public String edit(@PathVariable("lectureId") long lectureId, Form form, HttpServletRequest request)
             throws IOException, LectureNotFound {
         Index lecture = indexService.getLecture(lectureId);
         if (lecture == null
                 || (!request.isUserInRole("ROLE_ADMIN"))){
-//                && !principal.getName().equals(lecture.getLectureTitle())
             return "redirect:/index";
         }
         indexService.updateLecture(lectureId, form.getLectureTitle(), form.getAttachments());
@@ -197,7 +193,7 @@ public class IndexController {
     }
 
     @GetMapping("/update/{username}")
-    public ModelAndView showUpdateForm(@PathVariable("username") String username, Principal principal, HttpServletRequest request) {
+    public ModelAndView showUpdateForm(@PathVariable("username") String username, HttpServletRequest request) {
         IndexUser user = indexService.findUserByUsername(username);
         ModelAndView modelAndView = new ModelAndView("updateUser");
         IndexController.updateForm updateform = new IndexController.updateForm();
@@ -213,18 +209,15 @@ public class IndexController {
     }
 
     @PostMapping("/update/{username}")
-    public String updateUserProfile(@PathVariable("username") String username, @Valid @ModelAttribute("updateForm") IndexController.updateForm updateform, Principal principal) throws IOException {
+    public String updateUserProfile(@PathVariable("username") String username, @Valid @ModelAttribute("updateForm") IndexController.updateForm updateform) throws IOException {
 
-        //Fetch the current user details
         IndexUser currentUser = indexService.findUserByUsername(username);
 
-        //Apply conditional updates only if the fields are not empty
         String updatedPassword = updateform.getPassword().isEmpty() ? currentUser.getPassword() : updateform.getPassword();
         String updatedFullName = updateform.getFullName().isEmpty() ? currentUser.getFullName() : updateform.getFullName();
         String updatedEmail = updateform.getEmail().isEmpty() ? currentUser.getEmail() : updateform.getEmail();
         String updatedPhone = updateform.getPhone().isEmpty() ? currentUser.getPhone() : updateform.getPhone();
 
-        //Pass the updated values to the service layer
         indexService.updateUserProfile(username, updatedPassword, updatedFullName, updatedEmail, updatedPhone);
 
         return "redirect:/index?updateSuccess=true";
@@ -238,17 +231,15 @@ public class IndexController {
 
     @GetMapping("/viewAllComments")
     public String viewAllComments(Model model) {
-        // Fetch lecture comments and their corresponding lectures
         List<LectureComments> lectureComments = lectureCommentsService.getAllLectureComments();
-        Map<Long, String> lectureTitles = new HashMap<>(); // Maps lecture ID to its title
+        Map<Long, String> lectureTitles = new HashMap<>();
         for (LectureComments comment : lectureComments) {
             Index lecture = comment.getLecture();
             lectureTitles.put(lecture.getId(), lecture.getLectureTitle());
         }
 
-        // Fetch poll comments and their corresponding poll questions
         List<PollComment> pollComments = pollService.getAllPollComments();
-        Map<Long, String> pollQuestions = new HashMap<>(); // Maps poll ID to its question
+        Map<Long, String> pollQuestions = new HashMap<>();
         for (PollComment comment : pollComments) {
             Poll poll = null;
             try {
@@ -259,17 +250,15 @@ public class IndexController {
             pollQuestions.put(poll.getId(), poll.getQuestion());
         }
 
-        // Pass data to the model
         model.addAttribute("lectureComments", lectureComments);
         model.addAttribute("lectureTitles", lectureTitles);
         model.addAttribute("pollComments", pollComments);
         model.addAttribute("pollQuestions", pollQuestions);
 
-        return "viewAllComments"; // Refers to the JSP view file
+        return "viewAllComments";
     }
 
 
-    //user own comments getter
     @GetMapping("/userOwnComments")
     public String getUserComments(Model model, Authentication authentication) {
         String username = authentication.getName();

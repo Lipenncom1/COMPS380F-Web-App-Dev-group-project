@@ -19,9 +19,8 @@ public class PollComment {
     private String commentText;
 
     @Column(name = "created_at")
-    private String createdAt; // Optional for tracking when the comment was added
+    private String createdAt;
 
-    // Getters and Setters
     public long getId() {
         return id;
     }

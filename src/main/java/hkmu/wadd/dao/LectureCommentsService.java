@@ -8,7 +8,6 @@ import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 @Service
 public class LectureCommentsService {
@@ -51,7 +50,6 @@ public class LectureCommentsService {
         return lectureCommentsRepository.findAll();
     }
 
-    //add 4.13
     @Transactional
     public List<LectureComments> getLectureCommentsByUsername(String username) {
         return lectureCommentsRepository.findByUsername(username);

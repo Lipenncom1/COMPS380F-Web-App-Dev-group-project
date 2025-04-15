@@ -1,6 +1,5 @@
 package hkmu.wadd.Controller;
 
-import hkmu.wadd.Model.Index;
 import hkmu.wadd.Model.IndexUser;
 import hkmu.wadd.dao.UserManagementService;
 import jakarta.annotation.Resource;
@@ -21,6 +20,7 @@ import java.security.Principal;
 public class UserManagementController {
     @Resource
     UserManagementService umService;
+
     @GetMapping({"", "/", "/listUser"})
     public String list(ModelMap model) {
         model.addAttribute("IndexUser", umService.getAllIndexUser());
@@ -85,7 +85,6 @@ public class UserManagementController {
         private String email;
         private String phone;
         private String[] roles;
-        // getters and setters for all properties
 
         public String getUsername() {
             return username;
@@ -136,7 +135,6 @@ public class UserManagementController {
         umService.createIndexUser(form.getUsername(),
                 form.getPassword(), form.getRoles());
         return "redirect:/user/listUser";
-        //return "redirect:/user/listUser";
     }
     @GetMapping("/delete/{username}")
     public String deleteUser(@PathVariable("username") String username) {
@@ -173,9 +171,6 @@ public class UserManagementController {
         form.setFullName(user.getFullName());
         form.setEmail(user.getEmail());
         form.setPhone(user.getPhone());
-//        form.setRoles(user.getRoles().stream()
-//                .map(UserRole::getRole)
-//                .toArray(String[]::new));
 
         modelAndView.addObject("editForm", user);
         return modelAndView;
@@ -183,10 +178,8 @@ public class UserManagementController {
 
     @PostMapping("/edit/{username}")
     public String editUser(@PathVariable("username") String username, @Valid @ModelAttribute("editForm") editForm editform, Principal principal, HttpServletRequest request) throws IOException {
-        // Fetch the current user details
         IndexUser currentUser = umService.findUserByUsername(username);
 
-        // Apply conditional updates only if the fields are not empty
         String updatedPassword = editform.getPassword().isEmpty() ? currentUser.getPassword() : editform.getPassword();
         String updatedFullName = editform.getFullName().isEmpty() ? currentUser.getFullName() : editform.getFullName();
         String updatedEmail = editform.getEmail().isEmpty() ? currentUser.getEmail() : editform.getEmail();
@@ -195,7 +188,6 @@ public class UserManagementController {
                 currentUser.getRoles().stream().map(UserRole::getRole).toArray(String[]::new) :
                 editform.getRoles();
 
-        // Pass the updated values to the service layer
         umService.editUser(username, updatedPassword, updatedFullName, updatedEmail, updatedPhone, updatedRoles);
 
         return "redirect:/user/listUser?update=true";

@@ -1,11 +1,5 @@
 package hkmu.wadd.dao;
 
-//Service layer: Services encapsulate the business logic of the application and consume other
-//services and repositories but do not consume resources in higher application layers like
-//controllers. In Spring, services are annotated with @Service. From a transactional point of
-//view, the execution of a service method from a higher layer (such as a controller) can be
-//thought of as a transactional unit of work. A service may perform several operations on
-//multiple repositories.
 
 import hkmu.wadd.Model.Attachment;
 import hkmu.wadd.Model.Index;
@@ -132,7 +126,6 @@ public class IndexService {
     public void updateUserProfile(String username, String password,String fullName, String email, String phone){
         IndexUser user = indexUserRepository.findById(username).orElseThrow( () -> new UsernameNotFoundException("User not found"));
 
-        //UPDATE-ABLE FIELDS
         if (password != null && !password.isBlank()) {
             user.setPassword(password);
         }

@@ -1,10 +1,8 @@
 package hkmu.wadd.Controller;
 
 import hkmu.wadd.dao.LectureCommentsService;
-import hkmu.wadd.dao.PollService;
 import hkmu.wadd.exception.LectureNotFound;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class CommentsController {
     @Resource
     private LectureCommentsService lectureCommentsService;
-    @Autowired
-    private PollService pollService;
 
 
     @PostMapping("/{lectureId}/add")

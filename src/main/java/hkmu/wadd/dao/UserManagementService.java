@@ -47,12 +47,7 @@ public class UserManagementService {
         if (fullName != null) user.setFullName(fullName);
         if (email != null) user.setEmail(email);
         if (phone != null) user.setPhone(phone);
-//        if (roles != null) {
-//            user.getRoles().clear();
-//            for (String role : roles) {
-//                user.getRoles().add(new UserRole(user, role));
-//            }
-//        }
+
         indexUserRepository.save(user);
     }
 

@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +95,6 @@ public class PollController {
         List<Poll> polls = pollService.getPolls();
         Map<Long, List<UserVote>> votesByPoll = new HashMap<>();
 
-        // Fetch votes for each poll
         for (Poll poll : polls) {
             List<UserVote> votes = pollService.getAllVotesByPollId(poll.getId());
             votesByPoll.put(poll.getId(), votes);
@@ -130,7 +128,6 @@ public class PollController {
 
         if (option == null || option.isEmpty()) {
             model.addAttribute("errorMessage", "Please choose a choice");
-//            return viewPoll(pollId, model);
             return "redirect:/index/viewPoll/" + pollId;
 
         }
