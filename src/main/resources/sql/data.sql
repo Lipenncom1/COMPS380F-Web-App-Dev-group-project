@@ -22,9 +22,9 @@ VALUES
     (1, 'joe', 'Could you provide slides before the lecture?'),
     (1, 'peter', 'I am excited to join this session.');
 
--- INSERT INTO attachement (content, content_type, filename, lecture_id)
--- VALUES
---     ('', 'application/pdf', 'COMP 3820SEF and S380F Course Guide 2025.pdf', 1, );
+INSERT INTO attachment (content, content_type, filename, lecture_id)
+VALUES
+    (x'73616d706c652066696c652031364d6179', 'text/plain', 'sample.txt', 1);
 
 insert into poll (question, option_a, option_b, option_c, option_d, count_a, count_b, count_c, count_d)
 values ('When would you like to have your midterm exam?', 'Monday', 'Wednesday', 'Friday', 'Next Monday', 3, 5, 2, 8);
