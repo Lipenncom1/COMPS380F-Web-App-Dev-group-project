@@ -20,7 +20,7 @@ create table if not exists attachment (
                                           filename varchar(255),
                                           lecture_id bigint,
                                           primary key (id),
-                                          foreign key (lecture_id) references lecture
+                                          foreign key (lecture_id) references lecture ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS user_roles;
@@ -29,9 +29,9 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
                                      username VARCHAR(50) NOT NULL,
                                      password VARCHAR(50) NOT NULL,
-                                    email VARCHAR(100) NOT NULL,
-                                    FULL_NAME VARCHAR (300) NOT NULL,
-                                    PHONE VARCHAR(8) NOT NULL,
+                                    email VARCHAR(100),
+                                    FULL_NAME VARCHAR (300),
+                                    PHONE VARCHAR(8),
                                      PRIMARY KEY (username)
 );
 CREATE TABLE IF NOT EXISTS user_roles (
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS user_roles (
                                           username VARCHAR(50) NOT NULL,
                                           role VARCHAR(50) NOT NULL,
                                           PRIMARY KEY (user_role_id),
-                                          FOREIGN KEY (username) REFERENCES users(username)
+                                          FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
 );
 
 
@@ -51,8 +51,8 @@ CREATE TABLE IF NOT EXISTS lecture_comments(
     comment_text VARCHAR(1000) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (comment_id),
-    FOREIGN KEY (lecture_id) REFERENCES lecture(id),
-    FOREIGN KEY (username) REFERENCES users(username)
+    FOREIGN KEY (lecture_id) REFERENCES lecture(id) ON DELETE CASCADE,
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
     );
 
 
@@ -77,8 +77,8 @@ create table if not exists user_vote (
                                          poll_id bigint not null,
                                          vote_option varchar(1) not null,
                                          primary key (id),
-                                         foreign key (username) references users(username),
-                                         foreign key (poll_id) references poll(id),
+                                         foreign key (username) references users(username) ON DELETE CASCADE,
+                                         foreign key (poll_id) references poll(id) ON DELETE CASCADE,
                                          unique (username, poll_id)
 );
 
@@ -89,7 +89,7 @@ CREATE TABLE poll_comments (
                                comment_text VARCHAR(1000) NOT NULL,
                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                PRIMARY KEY (comment_id),
-                               FOREIGN KEY (poll_id) REFERENCES poll(id),
-                               FOREIGN KEY (username) REFERENCES users(username)
+                               FOREIGN KEY (poll_id) REFERENCES poll(id) ON DELETE CASCADE,
+                               FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
 );
 
