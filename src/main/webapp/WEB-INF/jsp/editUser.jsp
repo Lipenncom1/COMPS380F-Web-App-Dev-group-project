@@ -1,28 +1,153 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
-<head><title>Course Page</title></head>
+<head>
+    <title>Edit User</title>
+    <style>
+        :root {
+            --primary-purple: #6a0dad;
+            --secondary-purple: #9b59b6;
+            --light-purple: #bb8fce;
+            --lighter-purple: #e8daef;
+            --white: #ffffff;
+            --dark-purple: #4a235a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--lighter-purple), var(--white));
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--dark-purple);
+        }
+
+        .container {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 500px;
+            border: 1px solid var(--light-purple);
+        }
+
+        h2 {
+            color: var(--primary-purple);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 28px;
+            border-bottom: 2px solid var(--lighter-purple);
+            padding-bottom: 10px;
+        }
+
+        .logout-btn {
+            background-color: var(--primary-purple);
+            color: var(--white);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn:hover {
+            background-color: var(--secondary-purple);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            text-align: left;
+            margin-bottom: 8px;
+            color: var(--dark-purple);
+            font-weight: 600;
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="phone"] {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid var(--lighter-purple);
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        form input:focus {
+            border-color: var(--secondary-purple);
+            outline: none;
+        }
+
+        .username-display {
+            font-weight: bold;
+            color: var(--primary-purple);
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: var(--lighter-purple);
+            border-radius: 5px;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-purple);
+            color: var(--white);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
 <body>
-<c:url var="logoutUrl" value="/logout"/>
-<form action="${logoutUrl}" method="post">
-    <input type="submit" value="Log out"/>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</form>
-<h2>Edit User</h2>
-<form:form action="${pageContext.request.contextPath}/user/edit/${editForm.username}" method="POST" modelAttribute="editForm">
-    <form:label path="username">Username: ${editForm.username}</form:label><br/>
+<div class="container">
+    <c:url var="logoutUrl" value="/logout"/>
+    <form action="${logoutUrl}" method="post">
+        <input type="submit" value="Log out" class="logout-btn"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
 
-    <form:label path="password">new password</form:label><br/>
-    <form:input type="text" path="password"/><br/><br/>
-    <form:label path="fullName">New full name</form:label><br/>
-    <form:input type="text" path="fullName"/><br/><br/>
-    <form:label path="email">New email</form:label><br/>
-    <form:input type="email" path="email"/><br/><br/>
-    <form:label path="phone">New phone</form:label><br/>
-    <form:input type="phone" path="phone"/><br/><br/>
+    <h2>Edit User</h2>
 
-    <br/><br/>
-    <input type="submit" value="Edit User"/>
-</form:form>
+    <form:form action="${pageContext.request.contextPath}/user/edit/${editForm.username}" method="POST" modelAttribute="editForm">
+        <div class="username-display">
+            Username: ${editForm.username}
+        </div>
+
+        <form:label path="password">New password</form:label>
+        <form:input type="password" path="password" placeholder="Enter new password"/>
+
+        <form:label path="fullName">New full name</form:label>
+        <form:input type="text" path="fullName" placeholder="Enter full name"/>
+
+        <form:label path="email">New email</form:label>
+        <form:input type="email" path="email" placeholder="Enter email address"/>
+
+        <form:label path="phone">New phone</form:label>
+        <form:input type="tel" path="phone" placeholder="Enter phone number"/>
+
+        <input type="submit" value="Save Changes" class="submit-btn"/>
+    </form:form>
+</div>
 </body>
 </html>
