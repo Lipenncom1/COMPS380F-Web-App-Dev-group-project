@@ -39,8 +39,12 @@ A full-stack web application for delivering interactive online courses with real
 
 1. **Clone and Setup**
    ```bash
-   git clone https://github.com/Lipenncom1/COMPS380F-Web-App-Dev-group-project.git
-   cd S380Project
+   git clone https://github.com/5itspj/School-Web-Application.git
+   ```
+   ```
+   cd School-Web-Application
+   ```
+   ```
    ./gradlew clean build
    ```
 
@@ -50,7 +54,7 @@ A full-stack web application for delivering interactive online courses with real
    ```
 
 3. **Access the Platform**
-   Navigate to: http://localhost:8081/S380Project
+   Navigate to: http://localhost:8081/S380Project/
 
 ### Default Accounts
 **Instructor Account:**
@@ -113,8 +117,9 @@ A full-stack web application for delivering interactive online courses with real
 The application uses H2 database with the following settings:
 - **Database URL**: `jdbc:h2:mem:testdb`
 - **Console**: http://localhost:8081/S380Project/h2-console
-- **Username**: `myDB`
-- **Password**: `sa`
+- **Database Name**: `myDB`
+- **Username**: `sa`
+- **Password**: `password`
 
 Database schema and initial data are automatically initialized on application startup.
 
@@ -130,12 +135,6 @@ Database schema and initial data are automatically initialized on application st
 | GET | `/user/profile` | User profile | Authenticated |
 | GET | `/admin/users` | User management | Instructor |
 ...and more
-## 🔧 Development
-
-### Building from Source
-```bash
-./gradlew clean build
-```
 
 ### Running Tests
 ```bash
