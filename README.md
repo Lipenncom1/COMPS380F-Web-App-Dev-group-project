@@ -42,7 +42,7 @@ A full-stack web application for delivering interactive online courses with real
    git clone https://github.com/5itspj/School-Web-Application.git
    ```
    ```
-   cd School-Web-Application
+   cd COMPS380F-Web-App-Dev-group-project
    ```
    ```
    ./gradlew clean build
